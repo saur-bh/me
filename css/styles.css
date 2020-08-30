@@ -95,7 +95,7 @@ h2{
     }
     
     @keyframes example {
-        100% {box-shadow: 4px 4px 5px 4px black;
+        100% {box-shadow: 4px 4px 5px 4px;
               }
        
      
