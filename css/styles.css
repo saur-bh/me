@@ -95,7 +95,7 @@ h2{
     }
     
     @keyframes example {
-        100% {box-shadow: 4px 4px 5px 4px;
+        20% {box-shadow: 4px 4px 5px 4px;
               }
        
      
@@ -187,5 +187,9 @@ h2{
       
       
 
+    }
+
+    .testClass{
+        background-color: red;
     }
     
