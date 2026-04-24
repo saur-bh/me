@@ -10,26 +10,24 @@
       <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon">
    </head>
    <body>
-    
-       <nav class="main-nav stik" >
+       <nav class="main-nav stik">
         <ul class="nav-bar">
                 <li><a href="#start" class="nav">Home</a></li>
                 <li><a href="#my-skill" class="nav">Skills</a></li>
                 <li><a href="Fun/dicee.html" class="nav">PlayGround</a></li>
                 <li><a href="#contactme" class="nav">Contact</a></li>
-                <li></li>
-                
+                <li><button id="openChat" class="nav ask-nav" type="button" aria-haspopup="dialog" aria-controls="chatPanel">Ask me</button></li>
         </ul>
       </nav>
-      <div >
-       
-         
-      </div>
+      <div></div>
       <div class="top-container" id="start">
-         <h1 class="intro" >I am Saurabh</h1>
+         <h1 class="intro">I am Saurabh</h1>
          <img class="bug-down" src="images/antivirus.png" alt="bug-photo">
+         <div class="askTeaserWrap">
+            <button id="chatTeaser" class="askTeaserBtn" type="button" aria-haspopup="dialog" aria-controls="chatPanel">Ask me something</button>
+            <div class="askTeaserSub">Playwright · API · CI/CD</div>
+         </div>
          <h2 class="intro text">A Software Test Engineer.</h2>
-         <!-- <img class="computer"src="images/Computer.PNG" alt="computer"> -->
       </div>
       <div class="middle-container">
          <div class="profile">
@@ -39,20 +37,20 @@
             </section>
          </div>
          
-         <section class="skills-section" >
+         <section class="skills-section">
             <h2 id="my-skill">My Skills</h2>
             <div class="skill-row">
                <div class="inside">
                   <img class="skills" src="images/automation.png" alt="automation">
-                  <p> Automation Testing</p>
+                  <p>Automation Testing</p>
                </div>
                <div class="inside">
                   <img class="skills" src="images/seo-report.png" alt="Reporting & documentation">
-                  <P>Manual testing</P>
+                  <p>Manual testing</p>
                </div>
                <div class="inside">
                   <img class="skills" src="images/code.png" alt="web-Testing">
-                  <P>WebSite Testing</P>
+                  <p>WebSite Testing</p>
                </div>
                <div class="inside">
                   <img class="skills" src="images/api.png" alt="api testing">
@@ -65,12 +63,6 @@
             </div>
          </section>
 
-       <!--  <div class="eperience">
-                <h2>Professional Experience</h2>   
-                  <img class="professionalExp" src="images/careerGraph (2).png" alt="experince">
-          </div>
-      </div>  -->
-      
       <div class="contact-me">
          <h2>Get In Touch</h2>
          <p>I am prepared for the next challenge in my career and look forward to hearing from you.</p>
@@ -78,15 +70,239 @@
       </div>
      
       <footer id="contactme">
-                  
-                    <a href="https://github.com/saur-bh" target="_blank">GitHub</a>
-                    <a href="https://www.linkedin.com/in/s-a-u-r-a-b-h/" target="_blank">LinkedIn</a>
-                    <a href="https://api.whatsapp.com/send?phone=919739992722&text=%27Hello+there!" target="_blank" ><img id="contact" src="images/whatsapp.png" alt="contact via whatsapp"></a>
-                    <p>&#169 2024 Saurabh Verma </p>
-               
-           
+                    <a href="https://github.com/saur-bh" target="_blank" rel="noreferrer">GitHub</a>
+                    <a href="https://www.linkedin.com/in/saurabh-verma-qa" target="_blank" rel="noreferrer">LinkedIn</a>
+                    <a href="Saurabh.pdf" target="_blank" rel="noreferrer">Resume</a>
+                    <p>&#169 2026 Saurabh Verma</p>
          <div class="iconMade">Icons made by <a href="https://www.flaticon.com/authors/freepik" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></div>
       </footer>
- 
+
+      <section id="chatPanel" class="chatPanel" aria-hidden="true">
+         <div class="chatHeader">
+            <div>
+               <div class="chatTitle">Ask Saurabh</div>
+               <div class="chatSub">QA-style answers (Playwright · API · CI/CD)</div>
+            </div>
+            <button id="closeChat" class="chatClose" type="button">Close</button>
+         </div>
+         <div id="chatMessages" class="chatMessages"></div>
+         <form id="chatForm" class="chatForm">
+            <textarea id="chatInput" rows="1" class="chatInput" placeholder="Ask me anything…"></textarea>
+            <button id="voiceBtn" class="chatBtn ghost" type="button" aria-label="Voice input">🎙</button>
+            <button class="chatBtn" type="submit">Send</button>
+         </form>
+         <div id="chatStatus" class="chatStatus"></div>
+      </section>
+
+      <script>
+         const RESUME = {
+            name: "Saurabh Verma",
+            title: "Senior QA Automation Engineer",
+            location: "Dresden, Germany",
+            contact: {
+               email: "saurabh.sept06@gmail.com",
+               phone: "+49 178 710 3720",
+               linkedin: "https://www.linkedin.com/in/saurabh-verma-qa",
+               github: "https://github.com/saur-bh",
+            },
+            highlights: {
+               years: "Close to 20 years in IT (9 years with German companies)",
+               focus: "UI + API automation, CI quality gates, and fast feedback loops",
+            },
+         };
+
+         const openChat = document.getElementById("openChat");
+         const chatTeaser = document.getElementById("chatTeaser");
+         const chatPanel = document.getElementById("chatPanel");
+         const closeChat = document.getElementById("closeChat");
+         const chatMessages = document.getElementById("chatMessages");
+         const chatForm = document.getElementById("chatForm");
+         const chatInput = document.getElementById("chatInput");
+         const chatStatus = document.getElementById("chatStatus");
+         const voiceBtn = document.getElementById("voiceBtn");
+
+         function setChatOpen(isOpen) {
+            if (isOpen) {
+               chatPanel.classList.add("open");
+               chatPanel.setAttribute("aria-hidden", "false");
+               requestAnimationFrame(() => chatInput?.focus());
+               if (!chatMessages.dataset.seeded) {
+                  addMessage("assistant", `Hi! I’m ${RESUME.name}. Ask me anything about QA automation, Playwright, API testing, CI/CD, or how I work.`);
+                  chatMessages.dataset.seeded = "true";
+               }
+            } else {
+               chatPanel.classList.remove("open");
+               chatPanel.setAttribute("aria-hidden", "true");
+            }
+         }
+
+         openChat?.addEventListener("click", () => setChatOpen(true));
+         chatTeaser?.addEventListener("click", () => setChatOpen(true));
+         closeChat?.addEventListener("click", () => setChatOpen(false));
+
+         function addMessage(role, text) {
+            const row = document.createElement("div");
+            row.className = role === "user" ? "chatRow user" : "chatRow assistant";
+            const bubble = document.createElement("div");
+            bubble.className = role === "user" ? "chatBubble user" : "chatBubble assistant";
+            bubble.textContent = text;
+            row.appendChild(bubble);
+            chatMessages.appendChild(row);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+         }
+
+         function normalize(text) {
+            return (text || "").toLowerCase().replace(/\s+/g, " ").trim();
+         }
+
+         function hasAny(text, keywords) {
+            return keywords.some((k) => text.includes(k));
+         }
+
+         function buildLocalAnswer(questionRaw) {
+            const q = normalize(questionRaw);
+            if (!q) return "Ask me something like: “How do you reduce Playwright flakiness?”";
+
+            if (hasAny(q, ["contact", "email", "mail", "linkedin", "github", "phone", "call", "whatsapp"])) {
+               return [
+                  "You can reach me here:",
+                  `Email: ${RESUME.contact.email}`,
+                  `Phone: ${RESUME.contact.phone}`,
+                  `LinkedIn: ${RESUME.contact.linkedin}`,
+                  `GitHub: ${RESUME.contact.github}`,
+               ].join("\n");
+            }
+
+            if (hasAny(q, ["who are you", "about", "summary", "background"])) {
+               return `I’m ${RESUME.title} based in ${RESUME.location}, with ${RESUME.highlights.years}. My focus is ${RESUME.highlights.focus}.`;
+            }
+
+            if (hasAny(q, ["playwright"])) {
+               return [
+                  "My Playwright approach is: stable selectors, clear test boundaries, and fast feedback in CI.",
+                  "I usually split tests into smoke (PR) + deeper suites (nightly), keep flaky tests quarantined with root-cause work, and prefer deterministic waits over timeouts.",
+               ].join("\n");
+            }
+
+            if (hasAny(q, ["api", "postman", "newman", "rest", "graphql"])) {
+               return [
+                  "For APIs I focus on high-signal checks: contracts, critical flows, and clear failure messages.",
+                  "A good setup is: contract checks in CI, plus a small set of end-to-end API flows that mirror business risk.",
+               ].join("\n");
+            }
+
+            if (hasAny(q, ["ci", "cd", "pipeline", "jenkins", "github actions", "quality gate"])) {
+               return [
+                  "I like CI quality gates that are measurable: pass rate thresholds, flaky tracking, and fast smoke coverage on PR.",
+                  "I also optimize runtime via parallelization/sharding and keep reporting simple (Allure / summaries) so it drives decisions.",
+               ].join("\n");
+            }
+
+            return "I can answer that. Are you asking about Playwright, API testing, CI/CD, or my way of working?";
+         }
+
+         async function buildAnswer(question) {
+            if (window.SAURABH_CHAT_API_URL) {
+               try {
+                  chatStatus.textContent = "Thinking…";
+                  const res = await fetch(window.SAURABH_CHAT_API_URL, {
+                     method: "POST",
+                     headers: { "Content-Type": "application/json" },
+                     body: JSON.stringify({
+                        message: question,
+                        persona: "Answer as Saurabh Verma, a Senior QA Automation Engineer. Keep answers practical and concise.",
+                        resume: RESUME,
+                     }),
+                  });
+                  if (res.ok) {
+                     const data = await res.json();
+                     if (typeof data?.reply === "string" && data.reply.trim()) return data.reply.trim();
+                  }
+               } catch (e) {
+               } finally {
+                  chatStatus.textContent = "";
+               }
+            }
+            return buildLocalAnswer(question);
+         }
+
+         function autoGrow(textarea) {
+            textarea.style.height = "auto";
+            textarea.style.height = Math.min(textarea.scrollHeight, 120) + "px";
+         }
+
+         chatInput?.addEventListener("input", () => autoGrow(chatInput));
+         chatInput?.addEventListener("keydown", (e) => {
+            if (e.key === "Enter" && !e.shiftKey) {
+               e.preventDefault();
+               chatForm.requestSubmit();
+            }
+         });
+
+         chatForm?.addEventListener("submit", async (e) => {
+            e.preventDefault();
+            const question = (chatInput.value || "").trim();
+            if (!question) return;
+            addMessage("user", question);
+            chatInput.value = "";
+            autoGrow(chatInput);
+            const answer = await buildAnswer(question);
+            addMessage("assistant", answer);
+         });
+
+         const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+         let recognition = null;
+         let isRecording = false;
+
+         function setRecordingState(next) {
+            isRecording = next;
+            if (!voiceBtn) return;
+            voiceBtn.classList.toggle("on", isRecording);
+            if (isRecording) chatStatus.textContent = "Listening…";
+            else if (chatStatus.textContent === "Listening…") chatStatus.textContent = "";
+         }
+
+         if (!SpeechRecognition) {
+            if (voiceBtn) {
+               voiceBtn.disabled = true;
+               voiceBtn.classList.add("disabled");
+               voiceBtn.setAttribute("title", "Voice input is not supported in this browser.");
+            }
+         } else {
+            recognition = new SpeechRecognition();
+            recognition.lang = "en-US";
+            recognition.interimResults = true;
+            recognition.continuous = false;
+
+            recognition.addEventListener("result", (event) => {
+               const transcript = Array.from(event.results)
+                  .map((r) => r[0]?.transcript || "")
+                  .join("")
+                  .trim();
+               if (!chatInput) return;
+               chatInput.value = transcript;
+               autoGrow(chatInput);
+            });
+
+            recognition.addEventListener("end", () => setRecordingState(false));
+            recognition.addEventListener("error", () => setRecordingState(false));
+
+            voiceBtn?.addEventListener("click", () => {
+               if (!recognition) return;
+               if (isRecording) {
+                  recognition.stop();
+                  setRecordingState(false);
+                  return;
+               }
+               setChatOpen(true);
+               setRecordingState(true);
+               try {
+                  recognition.start();
+               } catch (e) {
+                  setRecordingState(false);
+               }
+            });
+         }
+      </script>
    </body>
 </html>
